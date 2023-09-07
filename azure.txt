@@ -1,0 +1,56 @@
+To create a Virtual Machine (VM) in Azure Portal while disabling the public IP, you can follow these steps:
+
+Sign in to the Azure Portal:
+Go to the Azure Portal (https://portal.azure.com/) and sign in with your Azure account.
+
+Click on "Create a resource":
+On the Azure Portal dashboard, click on the "+ Create a resource" button.
+
+Search for "Virtual Machine":
+In the "Search the Marketplace" box, type "Virtual Machine" and select it from the search results.
+
+Click "Create" on the Virtual Machine blade:
+You'll be taken to a page where you can configure your VM.
+
+Basics:
+Fill in the basic information for your VM, including:
+
+Subscription
+Resource Group
+Virtual Machine Name
+Region
+Availability Options (if needed)
+Image (e.g., Windows, Linux)
+Size
+Authentication:
+Choose how you want to authenticate to the VM. You can use SSH key (for Linux) or a username/password (for Windows). Make sure to create your credentials.
+
+Disks:
+Configure your VM's storage settings, including the OS disk and any additional data disks you may need.
+
+Networking:
+In the "Networking" tab, you can configure your VM's network settings. To disable the public IP, follow these steps:
+
+Under the "Virtual network" section, select an existing virtual network or create a new one.
+For "Public inbound ports," select "None" to disable public access.
+For "NIC network security group," you can leave it as is or configure a network security group for additional security rules if necessary.
+Management:
+Configure management settings such as monitoring, diagnostics, and boot diagnostics according to your preferences.
+
+Advanced:
+You can set up various advanced settings here, but make sure to check that public IP remains disabled.
+
+Tags (optional):
+Add tags to your VM for better organization and management.
+
+Review + create:
+Review all the settings you've configured, and when you're ready, click the "Create" button.
+
+Deployment:
+Azure will start creating the VM based on your configuration. You can monitor the deployment progress on the Azure Portal.
+
+Once the deployment is complete, you'll have a Virtual Machine in Azure without a public IP address, which means it won't be accessible from the public internet. You can access it via private IP or by setting up a VPN or Azure Bastion if you need secure remote access.
+
+
+
+
