@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+    <h1>Files List</h1>
+    <div id="fileList"></div>
+<table>
+  <thead>
+    <tr>
+      <th>File Name</th>
+      <th>File Size</th>
+    </tr>
+  </thead>
+  <tbody>
+    #set ($attachments = $content.getAttachments())
+    #foreach ($attachment in $attachments)
+      <tr>
+        <td><a href="$attachment.getDownloadPath()">$attachment.getFileName()</a></td>
+        <td>$attachment.getFileSize()</td>
+      </tr>
+    #end
+  </tbody>
+</table>
+</body>
+</html>
