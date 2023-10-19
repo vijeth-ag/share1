@@ -1,0 +1,22 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration 
+metadata:
+  name: my-validation-webhook
+webhooks:
+- name: external-auth.example.com
+  admissionReviewVersions:
+    - v1  # Add this line to specify the version
+  clientConfig: 
+    url: https://WEBHOOK_URL/validate
+    caBundle: LS0tLS1...
+  rules: 
+  - operations: 
+    - CREATE
+    apiGroups:
+    - ""
+    apiVersions:
+    - "*"
+    resources:
+    - pods
+  failurePolicy: Fail
+  sideEffects: None
