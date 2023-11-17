@@ -1,4 +1,10 @@
-curl -k -X POST \
-     -H "Content-Type: application/json" \
-     -d "{\"apiVersion\":\"authentication.k8s.io/v1\",\"kind\":\"TokenReview\",\"spec\":{\"token\":\"$TOKEN\"}}" \
-     https://$OPENSHIFT_CLUSTER/apis/authentication.k8s.io/v1/tokenreviews
+{
+  "apiVersion": "authentication.k8s.io/v1",
+  "kind": "TokenReview",
+  "metadata": {
+    "name": "example-token-review"
+  },
+  "spec": {
+    "token": "YOUR_ACCESS_TOKEN_HERE"
+  }
+}
