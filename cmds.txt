@@ -1,0 +1,1 @@
+kubectl get nodes -o json | jq '.items[] | {name: .metadata.name, disk: .status.allocatable["kubernetes.io/fs-provisioner"]}' | grep -v null
