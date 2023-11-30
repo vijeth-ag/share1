@@ -1,3 +1,7 @@
+//kubectl get nodes -o jsonpath='{range .items[*].status.volumesAttached[*]}{.name}{"\t"}{.devicePath}{"\n"}{end}'
+
+
+
 package main
 
 import (
