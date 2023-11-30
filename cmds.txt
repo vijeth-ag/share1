@@ -1,1 +1,4 @@
 kubectl get nodes -o json | jq '.items[] | {name: .metadata.name, disk: .status.allocatable["kubernetes.io/fs-provisioner"]}' | grep -v null
+
+
+kubectl get nodes -o custom-columns=NAME:.metadata.name,STATUS:.status.conditions
