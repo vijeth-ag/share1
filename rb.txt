@@ -11,11 +11,15 @@ rules:
 
 
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: RoleBinding
 metadata:
+  name: token-review-role-binding
   namespace: {{ .Release.Namespace }}
+subjects:
+- kind: ServiceAccount
+  name: {{ default "default" .Values.serviceAccount.name }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
   name: token-review-role
-rules:
-- apiGroups: ["authentication.k8s.io"]
-  resources: ["tokenreviews"]
-  verbs: ["create"]
+  apiGroup: rbac.authorization.k8s.io
