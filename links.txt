@@ -3,3 +3,6 @@ https://docs.openshift.com/container-platform/4.10/rest_api/config_apis/authenti
 
 
 kubectl apply -f my-resource.yaml --header "X-Custom-Token: your-secret-token"
+
+
+https://docs.openshift.com/container-platform/4.9/authentication/configuring-internal-oauth.html#oauth-server-metadata_configuring-internal-oauth
