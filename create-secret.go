@@ -66,10 +66,19 @@ func getOpenShiftClientSet(kubeconfigPath string) (*occlient.Clientset, error) {
 }
 
 func createOrUpdateSecret(clientset *occlient.Clientset, secret *corev1.Secret) error {
-	_, err := clientset.CoreV1().Secrets("default").Create(context.TODO(), secret, metav1.CreateOptions{})
-	if err != nil {
+	existingSecret, err := clientset.CoreV1().Secrets("default").Get(context.TODO(), secret.Name, metav1.GetOptions{})
+	if err == nil {
+		// Secret already exists, update it
+		existingSecret.Data = secret.Data
+		_, err = clientset.CoreV1().Secrets("default").Update(context.TODO(), existingSecret, metav1.UpdateOptions{})
+		return err
+	} else if !metav1.IsNotFound(err) {
+		// An error occurred other than the Secret not existing
 		return err
 	}
 
-	return nil
+	// Secret doesn't exist, create it
+	_, err = clientset.CoreV1().Secrets("default").Create(context.TODO(), secret, metav1.CreateOptions{})
+	return err
 }
+
