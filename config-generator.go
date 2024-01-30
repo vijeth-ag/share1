@@ -1,11 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 
 	"gopkg.in/yaml.v2"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 type ConfigMap struct {
@@ -21,6 +26,7 @@ type Cluster struct {
 	Name    string `yaml:"name"`
 	Cluster struct {
 		Server string `yaml:"server"`
+		IP     string `yaml:"ip"`
 	} `yaml:"cluster"`
 }
 
@@ -41,6 +47,13 @@ type Context struct {
 }
 
 func main() {
+	// Fetch the cluster IP dynamically
+	clusterIP, err := getClusterIP()
+	if err != nil {
+		fmt.Printf("Error fetching cluster IP: %v\n", err)
+		os.Exit(1)
+	}
+
 	configMap := ConfigMap{
 		APIVersion: "v1",
 		Kind:       "Config",
@@ -49,8 +62,10 @@ func main() {
 				Name: "my-cluster",
 				Cluster: struct {
 					Server string `yaml:"server"`
+					IP     string `yaml:"ip"`
 				}{
-					Server: "https://cluster-api-server",
+					Server: fmt.Sprintf("https://%s", clusterIP),
+					IP:     clusterIP,
 				},
 			},
 		},
@@ -81,7 +96,11 @@ func main() {
 		CurrentContext: "my-context",
 	}
 
-	configMap.Clusters[0].Cluster.Server = "https://myauth.com/v1/authentication"
+	ip, err := getClusterIP()
+	if err != nil {
+		log.Println("getclusterip err", err)
+	}
+	log.Println("CLUSTER IP", ip)
 
 	yamlData, err := yaml.Marshal(configMap)
 	if err != nil {
@@ -96,4 +115,41 @@ func main() {
 	}
 
 	fmt.Println("YAML file generated successfully.")
+}
+
+func createKubeClient(configPath string) (*kubernetes.Clientset, error) {
+	// Load the Kubernetes configuration from the specified file path
+	config, err := clientcmd.BuildConfigFromFlags("", configPath)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create a Kubernetes client using the configuration
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
+	return clientset, nil
+}
+
+func getClusterIP() (string, error) {
+	// config, err := rest.InClusterConfig()
+
+	configPath := "/Users/vijeth.ag/.kube/config"
+
+	// Create a Kubernetes client using the configuration file
+	client, err := createKubeClient(configPath)
+	if err != nil {
+		fmt.Printf("Error creating Kubernetes client: %v\n", err)
+		os.Exit(1)
+	}
+
+	service, err := client.CoreV1().Services("default").Get(context.TODO(), "kubernetes", metav1.GetOptions{})
+	if err != nil {
+		log.Println("err3", err)
+		return "", err
+	}
+
+	return service.Spec.ClusterIP, nil
 }
