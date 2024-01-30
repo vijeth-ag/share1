@@ -153,3 +153,28 @@ func getClusterIP() (string, error) {
 
 	return service.Spec.ClusterIP, nil
 }
+
+
+
+// type KubeconfigSecret struct {
+// 	APIVersion string            `yaml:"apiVersion"`
+// 	Kind       string            `yaml:"kind"`
+// 	Metadata   KubeconfigMetadata `yaml:"metadata"`
+// 	Type       string            `yaml:"type"`
+// 	Data       KubeconfigData    `yaml:"data"`
+// }
+
+// // KubeconfigMetadata represents metadata for a Kubernetes Secret.
+// type KubeconfigMetadata struct {
+// 	Name   string            `yaml:"name"`
+// 	Labels map[string]string `yaml:"labels"`
+// }
+
+// // KubeconfigData represents the data field in the Kubernetes Secret.
+// type KubeconfigData struct {
+// 	Kubeconfig string `yaml:"kubeconfig"`
+// }
+
+
+
+
